@@ -1,0 +1,20 @@
+{
+  "name": "unix-socket-streams2",
+  "version": "1.0.0",
+  "description": "Auto-switching (tcp/stream vs udp/datagram) unix domain sockets wrapped in a Node stream",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "author": "Kris Reeves",
+  "license": "ISC",
+  "dependencies": {
+    "unix-dgram": "^0.1.1"
+  },
+  "devDependencies": {
+    "bluebird": "^2.3.11",
+    "mocha": "^2.0.1",
+    "should": "^4.3.1",
+    "should-eventually": "^0.1.2"
+  }
+}
