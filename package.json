@@ -14,7 +14,7 @@
   "devDependencies": {
     "bluebird": "^2.3.11",
     "mocha": "^2.0.1",
-    "should": "^4.3.1",
+    "should": "4.0.x",
     "should-eventually": "^0.1.2"
   }
 }
