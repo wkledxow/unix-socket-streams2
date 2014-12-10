@@ -15,8 +15,6 @@ function UnixSocket() {
     this.currentMessage = null;
     this.socket = null;
     this.state = 'disconnected';
-    
-    UnixSocket.parseArgs.apply(this, arguments);
 }
 inherits(UnixSocket, Writable);
 
@@ -24,7 +22,11 @@ UnixSocket.parseArgs = function (/*path, opts*/) {
     var i = arguments.length, args = new Array(i);
     while (i--) { args[i] = arguments[i]; }
     
-    var opts, path;
+    var opts, path, callback;
+    
+    if (typeof args[args.length-1] === 'function') {
+        callback = args.pop();
+    }
     
     if (typeof args[0] === 'string') {
         path = args.shift();
@@ -38,8 +40,12 @@ UnixSocket.parseArgs = function (/*path, opts*/) {
     
     this.path = opts.path || path;
     this.type = opts.type || 'tcp';
+    
+    return callback;
 };
-UnixSocket.prototype.connect = function (callback) {
+UnixSocket.prototype.connect = function (/*path, opts, callback*/) {
+    var callback = UnixSocket.parseArgs.apply(this, arguments);
+    
     var self = this;
     
     if (self.state !== 'disconnected') { throw new Error('Connect called while ' + self.state); }
@@ -53,7 +59,8 @@ UnixSocket.prototype.connect = function (callback) {
         
         var shouldWrite = self.currentMessage !== null;
         
-        if (callback) { callback(); }
+        if (callback) { callback(null, self); }
+        else { self.emit('connect'); }
         
         if (shouldWrite) { self.writeMessage(); }
     };
@@ -74,7 +81,9 @@ UnixSocket.prototype.connect = function (callback) {
             
             openSocket();
         } else {
-            self.emit('error', err);
+            if (callback) { callback(err); }
+            else { self.emit('error', err); }
+            
             self.destroy();
         }
     };

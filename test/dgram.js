@@ -41,8 +41,9 @@ describe('datagram sockets', function () {
         });
         
         return Promise.using(server, function () {
-            var socket = new UnixSocket(TEST_SOCKET, { type: 'dgram' });
-            return socket.connect$()
+            var socket = new UnixSocket();
+            
+            return socket.connect$(TEST_SOCKET, { type: 'dgram' })
             .then(function () {
                 return socket.write$('foo');
             })
@@ -69,8 +70,9 @@ describe('datagram sockets', function () {
         });
         
         return Promise.using(server, function () {
-            var socket = new UnixSocket(TEST_SOCKET, { type: 'dgram' });
-            return socket.connect$()
+            var socket = new UnixSocket();
+            
+            return socket.connect$(TEST_SOCKET, { type: 'dgram' })
             .then(function () {
                 return socket.write$('foo');
             })
@@ -99,8 +101,9 @@ describe('datagram sockets', function () {
         });
         
         return Promise.using(server, function () {
-            var socket = new UnixSocket(TEST_SOCKET, { type: 'tcp' });
-            return socket.connect$()
+            var socket = new UnixSocket();
+            
+            return socket.connect$(TEST_SOCKET, { type: 'tcp' })
             .then(function () {
                 return socket.write$('foo');
             })

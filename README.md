@@ -12,27 +12,28 @@ That's really all there is to it.
 
 ### Use
 
-    var UnixSocket = require('unix-socket-streams2');
-	var socket = new UnixSocket('/path/to/socket');
+    var UnixStream = require('unix-socket-streams2');
+	var socket = new UnixStream();
+    socket.connect('/path/to/socket', function (err, stream) { });
 
 ### Api
 
-#### Constructor
-You may optionally specify the type of socket to initially attempt to connect as like so:
+#### UnixStream#connect
 
-    var socket = new UnixSocket('/path/to/socket', { type: 'tcp' });
+	socket.connect(path, opts callback);
+
+You may specify the type of socket to initially attempt to connect as like so:
+
+    var socket = new UnixStream('/path/to/socket', { type: 'tcp' });
 
 Valid options are 'tcp' and 'dgram'
 
-#### UnixSocket#connect
 
-	socket.connect(callback);
-
-#### UnixSocket#end
+#### UnixStream#end
 
 	socket.end(callback);
 
-#### UnixSocket#write
+#### UnixStream#write
 
 	socket.write(callback);
 
