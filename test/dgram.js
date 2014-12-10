@@ -58,6 +58,22 @@ describe('datagram sockets', function () {
         });
     });
     
+    it('should emit a \'close\' event', function () {
+        var deferred = Promise.defer();
+        var server = getServer(function () { });
+        
+        return Promise.using(server, function () {
+            var socket = new UnixSocket();
+            
+            return socket.connect$(TEST_SOCKET, { type: 'dgram' })
+            .then(function () {
+                socket.once('close', deferred.resolve.bind(deferred));
+                socket.end();
+                return deferred.promise;
+            });
+        });
+    });
+    
     it('should support node-unix-datagram\'s congestion control', function () {
         var count = 0;
         var deferred = Promise.defer(),

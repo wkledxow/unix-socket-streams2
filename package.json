@@ -1,6 +1,6 @@
 {
   "name": "unix-socket-streams2",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Auto-switching (tcp/stream vs udp/datagram) unix domain sockets wrapped in a Node stream",
   "main": "index.js",
   "scripts": {

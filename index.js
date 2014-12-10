@@ -94,13 +94,15 @@ UnixSocket.prototype.connect = function (/*path, opts, callback*/) {
     };
     
     cleanup = function () {
-        if (!self.socket) { return; }
+        if (self.socket) {
+            self.socket.removeListener('error', onError);
+            self.socket.removeListener('close', onClose);
+            self.socket.removeListener('connect', onConnect);
+            
+            self.socket = null;
+        }
         
-        self.socket.removeListener('error', onError);
-        self.socket.removeListener('close', onClose);
-        self.socket.removeListener('connect', onConnect);
-        
-        self.socket = null;
+        self.emit('close');
     };
 
     openSocket = function () {
@@ -154,6 +156,7 @@ UnixSocket.prototype.end = function (cb) {
         switch (self.type) {
             case 'dgram':
                 self.socket.close();
+                self.socket.emit('close');
                 if (typeof cb === 'function') { cb(); }
             break;
             

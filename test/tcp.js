@@ -66,6 +66,22 @@ describe('tcp sockets', function () {
         });
     });
     
+    it('should emit a \'close\' event', function () {
+        var deferred = Promise.defer();
+        var server = getServer(function () { });
+        
+        return Promise.using(server, function () {
+            var socket = new UnixSocket();
+            
+            return socket.connect$(TEST_SOCKET, { type: 'dgram' })
+            .then(function () {
+                socket.once('close', deferred.resolve.bind(deferred));
+                socket.end();
+                return deferred.promise;
+            });
+        });
+    });
+    
     it('should switch to tcp for tcp sockets opened as datagram sockets', function () {
         var count = 0;
         var deferred = Promise.defer();
