@@ -60,7 +60,7 @@ UnixSocket.prototype.connect = function (/*path, opts, callback*/) {
         var shouldWrite = self.currentMessage !== null;
         
         if (callback) { callback(null, self); }
-        else { self.emit('connect'); }
+        else { self.emit('connect', self.type); }
         
         if (shouldWrite) { self.writeMessage(); }
     };
@@ -79,30 +79,31 @@ UnixSocket.prototype.connect = function (/*path, opts, callback*/) {
                 self.type = 'tcp';
             }
             
+            cleanup();
             openSocket();
         } else {
             if (callback) { callback(err); }
             else { self.emit('error', err); }
             
             self.destroy();
+            self.emit('close');
         }
     };
     
     onClose = function () {
-        cleanup();
         self.state = 'disconnected';
+        cleanup();
+        self.emit('close');
     };
     
     cleanup = function () {
-        if (self.socket) {
-            self.socket.removeListener('error', onError);
-            self.socket.removeListener('close', onClose);
-            self.socket.removeListener('connect', onConnect);
-            
-            self.socket = null;
-        }
+        if (!self.socket) { return; }
         
-        self.emit('close');
+        self.socket.removeListener('error', onError);
+        self.socket.removeListener('close', onClose);
+        self.socket.removeListener('connect', onConnect);
+        
+        self.socket = null;
     };
 
     openSocket = function () {

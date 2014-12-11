@@ -73,7 +73,7 @@ describe('datagram sockets', function () {
             });
         });
     });
-    
+
     it('should support node-unix-datagram\'s congestion control', function () {
         var count = 0;
         var deferred = Promise.defer(),
@@ -134,5 +134,34 @@ describe('datagram sockets', function () {
         });
     });
     
+    it('should not double-emit \'close\' when switching from tcp to udp', function () {
+        var count = 0;
+        var deferred = Promise.defer();
+        var server = getServer(function (buf) {
+            count++;
+            deferred.resolve(buf.toString());
+        });
+        var closed = 0;
+        
+        return Promise.using(server, function () {
+            var socket = new UnixSocket();
+            
+            socket.on('close', function () { closed++; });
+            
+            return socket.connect$(TEST_SOCKET, { type: 'tcp' })
+            .then(function () {
+                return socket.write$('foo');
+            })
+            .then(function () {
+                return socket.end$();
+            })
+            .then(function () {
+                return deferred.promise.should.eventually.equal('foo');
+            });
+        }).then(function () {
+            count.should.equal(1);
+            closed.should.equal(1);
+        });
+    });
 });
 
