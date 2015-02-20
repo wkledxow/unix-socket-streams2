@@ -1,7 +1,11 @@
 {
   "name": "unix-socket-streams2",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Auto-switching (tcp/stream vs udp/datagram) unix domain sockets wrapped in a Node stream",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myndzi/unix-socket-streams2"
+  },
   "main": "index.js",
   "scripts": {
     "test": "mocha test/*.js"
