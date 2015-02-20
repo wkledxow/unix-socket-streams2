@@ -66,7 +66,7 @@ UnixSocket.prototype.connect = function (/*path, opts, callback*/) {
     };
 
     onError = function (err) {
-        if (/\b91\b/.test(err.code) && !self.switched) {
+        if ((err.code === 'EPROTOTYPE' || /\b91\b/.test(err.code)) && !self.switched) {
             if (self.socket && self.socket.close) {
                 self.socket.close();
             }
