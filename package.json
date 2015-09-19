@@ -8,6 +8,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "bamp": "bamp",
     "test": "mocha test/*.js"
   },
   "author": "Kris Reeves",
