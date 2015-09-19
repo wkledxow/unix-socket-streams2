@@ -16,6 +16,7 @@
     "unix-dgram": "^0.2.2"
   },
   "devDependencies": {
+    "bamp": "^1.0.11",
     "bluebird": "^2.3.11",
     "mocha": "^2.0.1",
     "should": "4.0.x",
