@@ -152,7 +152,9 @@ UnixSocket.prototype.destroy = function () {
 UnixSocket.prototype.end = function (cb) {
     var self = this;
     Writable.prototype.end.call(this, function () {
-        if (!self.socket) { return cb(); }
+        if (!self.socket) { 
+            return typeof cb === 'function' ? cb() : undefined;
+        }
         
         switch (self.type) {
             case 'dgram':
